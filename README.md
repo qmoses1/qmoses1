@@ -1,7 +1,6 @@
 # Quentin Moses — Builder & Operator
 
 Insurance and insurtech growth exec — ex-Gartner, licensed producer, 15 years of operator experience.
-
 I build tools to work smarter. Here's what's running:
 
 ---
