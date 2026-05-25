@@ -11,6 +11,7 @@ AI-powered job search command center built with vanilla JS + Node.js.
 
 **What it does:**
 - Pulls roles from JSearch and LinkedIn APIs and scores them against a custom fit model
+- Parses job board emails via Gmail API into a unified inbox, eliminating duplicate tracking across platforms
 - Tracks applications, pipeline, and recruiter outreach in one interface
 - Generates tailored resume and cover letter drafts per role — variant selected automatically by engagement type and competency match
 - Daily briefing powered by Claude (Anthropic)
