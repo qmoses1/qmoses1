@@ -34,7 +34,7 @@ all the subscriptions — so burning those calls on the wrong prospects is costl
   social media activity, LinkedIn headcount, and job board postings (hiring = expansion signal)
 - Recommends which premium signals to run (email lookup, contact verification,
   phone validation, etc.) based on each prospect's score and business type — so you
-  never burn an API call on a prospect that won't convert
+  never burn an API call on a dead prospect.
 - Only escalates to paid data sources when the prospect clears the scoring threshold
 - Recommends 3 outreach products matched to business type and industry
 - Automates outreach sequences by business type — a salon gets Instagram → call → email,
