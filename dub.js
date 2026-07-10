@@ -26,7 +26,7 @@ function apiKey(explicit) {
   return key;
 }
 
-async function request(method, path, { key, body, query } = {}) {
+async function request(method, path, { key, body, query } = {}, attempt = 0) {
   const url = new URL(API_BASE + path);
   for (const [k, v] of Object.entries(query ?? {})) {
     if (v !== undefined && v !== null && v !== "") url.searchParams.set(k, v);
@@ -41,10 +41,29 @@ async function request(method, path, { key, body, query } = {}) {
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
+    // Retry rate limits and server errors with backoff — parallel test runs hit these.
+    if ((res.status === 429 || res.status >= 500) && attempt < 3) {
+      // retry-after may be seconds or an absolute epoch timestamp; cap at 30s either way.
+      const retryAfter = Number(res.headers.get("retry-after"));
+      const delaySec = Math.min(retryAfter > 0 ? retryAfter : 2 ** attempt * 2, 30);
+      await new Promise((r) => setTimeout(r, delaySec * 1000));
+      return request(method, path, { key, body, query }, attempt + 1);
+    }
     const message = data?.error?.message ?? `HTTP ${res.status}`;
     throw new Error(`Dub API ${method} ${path} failed: ${message}`);
   }
   return data;
+}
+
+/** Embed UTM params in the destination URL. Dub stores the final URL with UTMs
+ *  appended, and upsert matches on exact URL — so the helper must send the same
+ *  fully-composed URL every time for idempotency to work. */
+function withUtm(url, { source, medium, campaign }) {
+  const u = new URL(url);
+  if (source) u.searchParams.set("utm_source", source);
+  if (medium) u.searchParams.set("utm_medium", medium);
+  if (campaign) u.searchParams.set("utm_campaign", campaign);
+  return u.toString();
 }
 
 /**
@@ -58,7 +77,7 @@ async function request(method, path, { key, body, query } = {}) {
  * @param {string} [opts.source]   Traffic source, e.g. "facebook". Sets utm_source and adds a tag.
  * @param {string} [opts.campaign] Campaign name. Sets utm_campaign.
  * @param {string} [opts.medium]   Sets utm_medium.
- * @param {string[]} [opts.tags]   Extra Dub tag names (created on the fly).
+ * @param {string[]} [opts.tags]   Extra Dub tag names (missing tags are created automatically).
  * @param {string} [opts.domain]   Short domain; defaults to your workspace default (dub.sh on free plans).
  * @param {string} [opts.slug]     Custom back-half for the short link.
  * @param {string} [opts.externalId] Your own stable ID for the link (lookup key for analytics).
@@ -82,23 +101,30 @@ export async function createShortLink({
   const tagNames = [...tags];
   if (source && !tagNames.includes(source)) tagNames.push(source);
   if (isTest && !tagNames.includes("test")) tagNames.push("test");
-  return request("PUT", "/links/upsert", {
-    key,
-    body: {
-      url,
-      domain,
-      key: slug,
-      externalId,
-      tagNames: tagNames.length ? tagNames : undefined,
-      utm_source: source,
-      utm_medium: medium,
-      utm_campaign: campaign,
-    },
-  });
+  const body = {
+    url: withUtm(url, { source, medium, campaign }),
+    domain,
+    key: slug,
+    externalId,
+    tagNames: tagNames.length ? tagNames : undefined,
+  };
+  try {
+    return await request("PUT", "/links/upsert", { key, body });
+  } catch (err) {
+    // Dub rejects tagNames that don't exist yet — create them and retry once.
+    if (!/invalid tagnames/i.test(err.message)) throw err;
+    for (const name of tagNames) {
+      await request("POST", "/tags", { key, body: { name } }).catch(() => {});
+    }
+    return request("PUT", "/links/upsert", { key, body });
+  }
 }
 
 /**
  * Fetch click counts, grouped so you can compare traffic sources.
+ *
+ * NOTE: requires a paid Dub plan — the Analytics API returns 429 with
+ * x-ratelimit-limit: 0 on the free plan. Dashboard analytics work on any plan.
  *
  * @param {object} [opts]
  * @param {string} [opts.groupBy]    e.g. "tags" (compare sources), "timeseries", "referers", "countries".
