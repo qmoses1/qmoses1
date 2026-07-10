@@ -50,5 +50,27 @@ all the subscriptions — so burning those calls on the wrong prospects is costl
 
 ---
 
+## Dub Link Tracker
+Short-link helper for measuring traffic sources across my sites, built on the [Dub.co](https://dub.co) API.
+
+**What it does:**
+- Creates short links with UTM parameters and Dub tags per traffic source, so analytics cleanly separate Facebook vs. LinkedIn vs. email traffic
+- Idempotent by design (upsert): repeated calls from test runs reuse the same link instead of creating duplicates
+- Tags test-run links `test` so they never pollute real traffic data
+- Pulls click analytics grouped by source, referrer, or time
+
+**Usage:**
+```bash
+node dub.js https://mysite.com/quote --source facebook --campaign life-quote-v2
+```
+```js
+import { createShortLink, getClicks } from "./dub.js";
+const link = await createShortLink({ url, source: "facebook", campaign: "life-quote-v2" });
+```
+
+Requires `DUB_API_KEY` (see `.env.example`). **Stack:** Node.js · Dub API — zero dependencies
+
+---
+
 📧 quentindmoses@gmail.com
 🔗 [linkedin.com/in/quentindmoses](https://linkedin.com/in/quentindmoses)
