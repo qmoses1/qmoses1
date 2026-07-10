@@ -1,6 +1,8 @@
 # Quentin Moses — Builder & Operator
 
-Insurance and insurtech growth exec — ex-Gartner, licensed producer, 15 years of operator experience.
+Revenue, growth & distribution — insurance and healthtech. Former Gartner Director Analyst; advised Fortune 500 CMOs and senior marketing leaders at major U.S. insurance carriers. Licensed producer (Life, Health & Medicare) in 7 states. 15 years of operator experience.
+
+**Site: [quentindmoses.com](https://quentindmoses.com)** — fractional and permanent engagements.
 
 I build tools to work smarter. Here's what's running:
 
@@ -44,7 +46,7 @@ all the subscriptions — so burning those calls on the wrong prospects is costl
   business category to maximize open and response rates
 - Connects to your email and social accounts for execution
 
-**Built for:** NY Life insurance portfolio distribution — adaptable to any SMB vertical
+**Built for:** insurance portfolio distribution — adaptable to any SMB vertical
 
 **Stack:** React · Google Maps API · LinkedIn · Social APIs · Weighted scoring model
 
@@ -72,5 +74,6 @@ Requires `DUB_API_KEY` (see `.env.example`). **Stack:** Node.js · Dub API — z
 
 ---
 
+🌐 [quentindmoses.com](https://quentindmoses.com)
 📧 quentindmoses@gmail.com
 🔗 [linkedin.com/in/quentindmoses](https://linkedin.com/in/quentindmoses)
