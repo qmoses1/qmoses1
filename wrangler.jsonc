@@ -1,0 +1,9 @@
+{
+  // Cloudflare Worker: static site + /api/geo + /api/lead. No build step.
+  "name": "insurance-brokerage",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-07-01",
+  "assets": { "directory": "./public", "binding": "ASSETS" }
+  // Stage 2 — lead database. Uncomment once the D1 database exists:
+  // ,"d1_databases": [{ "binding": "DB", "database_name": "leads", "database_id": "PASTE_ID" }]
+}

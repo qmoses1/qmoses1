@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Life Insurance, Plain English — Which Kind Fits You?</title>
+<meta name="description" content="Term, whole life, or annuity? A 60-second plain-English questionnaire points you to the right kind of policy — then a licensed agent takes it from there, free.">
+<link rel="stylesheet" href="/styles.css"><script defer src="/ga.js"></script><script defer src="/forms.js"></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="/">Quentin Moses · Coverage, Plain English</a>
+  <nav><a href="/">Home</a></nav>
+</div></header>
+<main class="wrap">
+  <h1>Life insurance in 60 seconds: which kind actually fits you?</h1>
+  <p class="lead">Three questions. No rates, no pressure — just the right starting point, in plain English.</p>
+
+  <h2>1. What's the main job you need done?</h2>
+  <p>
+    <button class="pill" onclick="pick('goal','term',this)">Protect my family's income if I'm gone</button>
+    <button class="pill" onclick="pick('goal','whole',this)">Lifetime coverage that builds cash value</button>
+    <button class="pill" onclick="pick('goal','annuity',this)">Guaranteed income in retirement</button>
+  </p>
+  <div class="qstep2" id="q2">
+    <h2>2. Your age range?</h2>
+    <p>
+      <button class="pill" onclick="pick('age','under35',this)">Under 35</button>
+      <button class="pill" onclick="pick('age','35-50',this)">35–50</button>
+      <button class="pill" onclick="pick('age','51-64',this)">51–64</button>
+      <button class="pill" onclick="pick('age','65plus',this)">65+</button>
+    </p>
+  </div>
+  <div class="qstep2" id="q3">
+    <h2>3. Monthly amount you'd comfortably set aside?</h2>
+    <p>
+      <button class="pill" onclick="pick('budget','under50',this)">Under $50</button>
+      <button class="pill" onclick="pick('budget','50-150',this)">$50–150</button>
+      <button class="pill" onclick="pick('budget','150plus',this)">$150+</button>
+    </p>
+  </div>
+
+  <div class="qresult" id="r-term"><div class="notice"><strong>Your starting point: Term life.</strong> Big protection for the years your family depends on your income, at the lowest cost per dollar of coverage. Simple, and usually the right first policy.</div></div>
+  <div class="qresult" id="r-whole"><div class="notice"><strong>Your starting point: Whole life.</strong> Coverage that never expires and builds cash value you can use — costs more than term, but it's permanent. Often paired with a term policy.</div></div>
+  <div class="qresult" id="r-annuity"><div class="notice"><strong>Your starting point: An annuity.</strong> You set money aside now (or roll over savings) in exchange for guaranteed income later. Suitability rules apply — a licensed review is required, and that's a good thing.</div></div>
+
+  <div class="qresult" id="leadwrap">
+    <h2>Get your options — free, no obligation</h2>
+    <form class="form" onsubmit="return submitLead(this,{journey:'life',segment:sel.goal,source:'life-quiz-'+sel.age+'-'+sel.budget})">
+      <div class="form-fields">
+        <input class="fi hp" type="text" name="website" tabindex="-1" autocomplete="off">
+        <input class="fi" name="first" placeholder="First name" required>
+        <input class="fi" name="last" placeholder="Last name" required>
+        <input class="fi" type="email" name="email" placeholder="Email address" required>
+        <input class="fi" type="tel" name="phone" placeholder="Phone number" required>
+        <input class="fi" name="zip" placeholder="ZIP code" required>
+        <label class="consent"><input type="checkbox" name="consent" required><span>I agree a licensed agent may contact me by phone, text, or email about coverage options. Consent isn't a condition of purchase. Message/data rates may apply.</span></label>
+        <button class="btn" type="submit">Send me my options</button>
+      </div>
+      <div class="form-ok"><h3>Got it — we'll reach out within one business day.</h3></div>
+      <div class="form-fallback"><p>The form is momentarily offline — <a href="https://txquotes.webflow.io/review">book a free chat directly here</a>.</p></div>
+    </form>
+    <p class="fine">Final recommendations always depend on a licensed suitability review — that's what protects you.</p>
+  </div>
+</main>
+<footer class="site"><div class="wrap">
+  <p><strong>Quentin Moses</strong>, licensed insurance agent. NPN: 9877170 · TX License #: 1475793 · CA License #: 0F93140.</p>
+  <p>Not affiliated with any government agency. Agents are compensated by insurance carriers; this does not change your premium. Education only — not financial or tax advice.</p>
+</div></footer>
+<script>
+var sel={goal:null,age:null,budget:null};
+function pick(k,v,btn){sel[k]=v;var sibs=btn.parentNode.querySelectorAll('.pill');sibs.forEach(function(b){b.style.borderColor='#cdd5e0';b.style.color='#1a2233';});btn.style.borderColor='#0b5fff';btn.style.color='#0b5fff';
+ if(k==='goal'){document.getElementById('q2').style.display='block';}
+ if(k==='age'){document.getElementById('q3').style.display='block';}
+ if(sel.goal&&sel.age&&sel.budget){['term','whole','annuity'].forEach(function(x){document.getElementById('r-'+x).style.display=(x===sel.goal)?'block':'none';});document.getElementById('leadwrap').style.display='block';document.getElementById('leadwrap').scrollIntoView({behavior:'smooth'});}}
+</script>
+</body>
+</html>

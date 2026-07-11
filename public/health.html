@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Health Coverage Help — Free Licensed Agent (TX &amp; CA)</title>
+<meta name="description" content="Free help with marketplace health coverage: plan reviews, subsidy checks, and enrollment. Personalized for your state.">
+<link rel="stylesheet" href="/styles.css"><script defer src="/ga.js"></script><script defer src="/forms.js"></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="/">Quentin Moses · Coverage, Plain English</a>
+  <nav><a href="/">Home</a><a href="#lead">Get help</a></nav>
+</div></header>
+<main class="wrap">
+  <h1>Health coverage help — built for where you live.</h1>
+  <p>Where are you? <button class="pill" onclick="showPanel('ca')">California</button><button class="pill" onclick="showPanel('tx')">Texas</button><button class="pill" onclick="showPanel('other')">Another state</button></p>
+
+  <div id="p-ca" class="geo-panel">
+    <h2>California</h2>
+    <p class="lead">Already covered through Covered California? Get a <strong>free review</strong> — keep your exact plan and gain an agent you can actually call. Shopping? I'll help you compare and enroll, free.</p>
+    <div class="notice">Adding an agent never changes your plan, premium, or coverage — and there are California state subsidies many people don't realize they're owed.</div>
+  </div>
+  <div id="p-tx" class="geo-panel">
+    <h2>Texas</h2>
+    <p class="lead">Lost coverage, had a life change, or just never had anyone check your plan? Free reviews, subsidy checks, and enrollment help from a licensed Texas agent.</p>
+    <p><a class="btn" href="https://www.healthsherpa.com/?_agent_id=hlh" target="_blank" rel="noopener">Browse &amp; enroll on your own →</a></p>
+    <p class="fine">Self-serve still gets you me as your agent, at no cost.</p>
+  </div>
+  <div id="p-other" class="geo-panel">
+    <h2>Your state</h2>
+    <p class="lead">I'm licensed in Texas and California — but I can still get you to licensed help at no cost, and answer plain-English questions about how coverage works anywhere.</p>
+    <p><a class="btn" href="https://www.healthsherpa.com/?_agent_id=hlh" target="_blank" rel="noopener">See plans in your state →</a></p>
+  </div>
+
+  <div class="formsec" id="lead">
+    <h2>Tell me what you need — I'll reach out within one business day</h2>
+    <form class="form" onsubmit="return submitLead(this,{journey:'health'})">
+      <div class="form-fields">
+        <input class="fi hp" type="text" name="website" tabindex="-1" autocomplete="off">
+        <input class="fi" name="first" placeholder="First name" required>
+        <input class="fi" name="last" placeholder="Last name" required>
+        <input class="fi" type="email" name="email" placeholder="Email address" required>
+        <input class="fi" type="tel" name="phone" placeholder="Phone number" required>
+        <input class="fi" name="zip" placeholder="ZIP code" required>
+        <select class="fi" name="enrolled" required>
+          <option value="" disabled selected>Do you have a marketplace plan today?</option>
+          <option>Yes</option><option>No</option><option>Not sure</option><option>Need help shopping</option>
+        </select>
+        <label class="consent"><input type="checkbox" name="consent" required><span>I agree a licensed agent may contact me by phone, text, or email about my coverage. Consent isn't a condition of purchase. Message/data rates may apply.</span></label>
+        <button class="btn" type="submit">Get my free review</button>
+      </div>
+      <div class="form-ok"><h3>Got it — we'll reach out within one business day.</h3><p>Prefer sooner? <a href="https://txquotes.webflow.io/review">Book a time directly</a>.</p></div>
+      <div class="form-fallback"><p>The form is momentarily offline — <a href="https://txquotes.webflow.io/review">book your free review directly here</a>.</p></div>
+    </form>
+  </div>
+</main>
+<footer class="site"><div class="wrap">
+  <p><strong>Quentin Moses</strong>, licensed insurance agent. NPN: 9877170 · TX License #: 1475793 · CA License #: 0F93140.</p>
+  <p>Not affiliated with, endorsed by, or operated by HealthCare.gov, the Health Insurance Marketplace, Covered California, or any government agency.</p>
+  <p>Agents are compensated by insurance carriers; this does not change your premium. Education only — not medical, legal, or tax advice.</p>
+</div></footer>
+<script>
+function showPanel(k){['ca','tx','other'].forEach(function(x){document.getElementById('p-'+x).style.display=(x===k)?'block':'none';});}
+fetch('/api/geo').then(function(r){return r.json();}).then(function(g){
+  if(g.state==='CA')showPanel('ca');else if(g.state==='TX')showPanel('tx');else showPanel('other');
+}).catch(function(){showPanel('other');});
+</script>
+</body>
+</html>
